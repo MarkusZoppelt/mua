@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# check if gum is installed
+if ! command -v gum &> /dev/null
+then
+    echo "gum is not installed. Please install gum first."
+    exit
+fi
+
+GUM_SPIN_SHOW_OUTPUT=true # buggy for some reason
+
+tools="brew cargo go rustup"
+choices=""
+
+# check which tools are installed
+for tool in $tools; do
+    if command -v $tool &> /dev/null; then
+        choices="$choices $tool"
+    fi
+done
+
+# add --all option
+if [ "$1" != "--all" ]; then
+    echo "Choose what packages you want to update: "
+    choices=$(gum choose $choices --no-limit)
+fi
+
+for choice in $choices; do
+    if [ "$choice" = "rustup" ]; then
+        echo "Updating Rust toolchain..."
+        cmd="rustup update"
+        gum spin -s minidot --title "Running '$cmd'" -- $cmd
+    elif [ "$choice" = "cargo" ]; then
+        echo "Updating Rust binaries..."
+        cmd="cargo install-update -a"
+        gum spin -s minidot --title "Running '$cmd'" -- $cmd
+    elif [ "$choice" = "go" ]; then
+        if ! command -v go-global-update &> /dev/null; then
+            cmd="go install github.com/valyala/go-global-update@latest"
+            gum spin -s minidot --title "Installing go-global-update..." -- $cmd
+        fi
+        echo "Updating Go binaries..."
+        cmd="go-global-update"
+        gum spin -s minidot --title "Running '$cmd'" -- $cmd
+    elif [ "$choice" = "brew" ]; then
+        echo "Updating brew..."
+        gum spin -s minidot --title "Updating homebrew..." -- brew update
+        gum spin -s minidot --title "Upgrading all formulae..." -- brew upgrade
+        gum spin -s minidot --title "Upgrading all casks..." -- brew upgrade `brew list --cask`
+        gum spin -s minidot --title "Removing old versions..." -- brew cleanup
+        gum spin -s minidot --title "Removing unused dependencies..." -- brew autoremove 
+        brew doctor
+    fi
+done
+echo "Done!"
