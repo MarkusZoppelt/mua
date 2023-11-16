@@ -44,11 +44,11 @@ for choice in $choices; do
         gum spin -s minidot --title "Running '$cmd'" -- $cmd
     elif [ "$choice" = "brew" ]; then
         echo "Updating brew..."
-        gum spin -s minidot --title "Updating homebrew..." -- brew update
-        gum spin -s minidot --title "Upgrading all formulae..." -- brew upgrade
-        gum spin -s minidot --title "Upgrading all casks..." -- brew upgrade `brew list --cask`
-        gum spin -s minidot --title "Removing old versions..." -- brew cleanup
-        gum spin -s minidot --title "Removing unused dependencies..." -- brew autoremove 
+        brew update
+        brew upgrade
+        brew upgrade `brew list --cask`
+        brew cleanup
+        brew autoremove 
         brew doctor
     fi
 done
