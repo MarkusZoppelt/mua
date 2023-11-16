@@ -9,7 +9,7 @@ fi
 
 GUM_SPIN_SHOW_OUTPUT=true # buggy for some reason
 
-tools="brew cargo go rustup"
+tools="brew cargo gh go rustup"
 choices=""
 
 # check which tools are installed
@@ -50,6 +50,10 @@ for choice in $choices; do
         brew cleanup
         brew autoremove 
         brew doctor
+    elif [ "$choice" = "gh" ]; then
+        echo "Updating gh extensions..."
+        cmd="gh extension upgrade --all"
+        gum spin -s minidot --title "Running '$cmd'" -- $cmd
     fi
 done
 echo "Done!"
