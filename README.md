@@ -16,6 +16,7 @@ Update everything:
 
 ### Currently supported:
 
+* **asdf** plugins *and* tools
 * **Go** binaries via `go-global-update`
 * **Homebrew** formulae via `brew`
 * **Rust** binaries via `cargo install-update`
