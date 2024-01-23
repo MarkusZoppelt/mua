@@ -41,6 +41,12 @@ for choice in $choices; do
         echo "Updating asdf plugins..."
         cmd="asdf plugin update --all"
         gum spin -s minidot --title "Running '$cmd'" -- $cmd
+        echo "Updating asdf tools..."
+        for tool in $(asdf plugin list); do
+            asdf install $tool latest \
+            && asdf global $tool latest \
+            && echo "Updated $tool to latest and set as global"
+        done
     elif [ "$choice" = "rustup" ]; then
         echo "Updating Rust toolchain..."
         cmd="rustup update"
