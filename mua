@@ -9,11 +9,20 @@ fi
 
 GUM_SPIN_SHOW_OUTPUT=true # buggy for some reason
 
-tools="brew cargo gh go rustup"
+tools="asdf brew cargo gh go rustup"
+available_tools=""
+
+# check which tools are available
+for tool in $tools; do
+    if type $tool &> /dev/null; then
+        available_tools="$available_tools $tool"
+    fi
+done
+
 choices=""
 
 # check which tools are installed
-for tool in $tools; do
+for tool in $available_tools; do
     if command -v $tool &> /dev/null; then
         choices="$choices $tool"
     fi
@@ -23,10 +32,16 @@ done
 if [ "$1" != "--all" ]; then
     echo "Choose what packages you want to update: "
     choices=$(gum choose $choices --no-limit)
+else
+    choices=$available_tools
 fi
 
 for choice in $choices; do
-    if [ "$choice" = "rustup" ]; then
+    if [ "$choice" = "asdf" ]; then
+        echo "Updating asdf plugins..."
+        cmd="asdf plugin update --all"
+        gum spin -s minidot --title "Running '$cmd'" -- $cmd
+    elif [ "$choice" = "rustup" ]; then
         echo "Updating Rust toolchain..."
         cmd="rustup update"
         gum spin -s minidot --title "Running '$cmd'" -- $cmd
