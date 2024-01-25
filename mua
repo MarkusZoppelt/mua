@@ -9,7 +9,7 @@ fi
 
 GUM_SPIN_SHOW_OUTPUT=true # buggy for some reason
 
-tools="asdf brew cargo gh go rustup"
+tools="asdf brew cargo gh go mise rustup"
 available_tools=""
 
 # check which tools are available
@@ -75,6 +75,10 @@ for choice in $choices; do
         echo "Updating gh extensions..."
         cmd="gh extension upgrade --all"
         gum spin -s minidot --title "Running '$cmd'" -- $cmd
+    elif [ "$choice" = "mise" ]; then
+        echo "Updating mise tools..."
+        mise up
+        mise prune
     fi
 done
 echo "Done!"

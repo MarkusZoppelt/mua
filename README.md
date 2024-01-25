@@ -19,6 +19,7 @@ Update everything:
 * **asdf** plugins *and* tools
 * **Go** binaries via `go-global-update`
 * **Homebrew** formulae via `brew`
+* **mise** tools
 * **Rust** binaries via `cargo install-update`
 * **Rust** toolchain via `rustup`
 
