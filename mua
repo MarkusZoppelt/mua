@@ -78,7 +78,6 @@ for choice in $choices; do
     elif [ "$choice" = "mise" ]; then
         echo "Updating mise tools..."
         mise up
-        mise prune
     fi
 done
 echo "Done!"
